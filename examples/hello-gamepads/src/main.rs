@@ -22,6 +22,9 @@ fn main() {
                     println!("Front left lower button is currently pressed");
                 }
             }
+            for button in gamepad.all_just_released() {
+                println!("Button just RELEASED: {button:?}");
+            }
 
             if gamepad.left_stick() != (0., 0.) {
                 println!("Left stick: {:?}", gamepad.left_stick());

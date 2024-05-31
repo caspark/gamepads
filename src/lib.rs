@@ -98,7 +98,7 @@
 //!                 println!("Front left lower button is currently pressed");
 //!             }
 //!         }
-//!         
+//!
 //!         println!("Left stick: {:?}", gamepad.left_stick());
 //!         println!("Right stick: {:?}", gamepad.right_stick());
 //!     }
@@ -161,7 +161,6 @@ pub struct Gamepad {
     connected: bool,
     pressed_bits: u32,
     axes: [f32; 4],
-    #[cfg(target_family = "wasm")]
     last_pressed_bits: u32,
     #[cfg(not(target_family = "wasm"))]
     just_pressed_bits: u32,
@@ -240,6 +239,11 @@ impl Gamepad {
         Button::all().filter(|&t| self.is_just_pressed(t))
     }
 
+    /// An iterator over all just released buttons.
+    pub fn all_just_released(&self) -> impl Iterator<Item = Button> + '_ {
+        Button::all().filter(|&t| self.is_just_released(t))
+    }
+
     /// Check if a button has just been pressed.
     pub const fn is_just_pressed(&self, button: Button) -> bool {
         let queried_bit = 1 << (button as u32);
@@ -257,6 +261,12 @@ impl Gamepad {
     pub const fn is_currently_pressed(&self, button: Button) -> bool {
         let queried_bit = 1 << (button as u32);
         (self.pressed_bits & queried_bit) != 0
+    }
+
+    /// Check if a button has just been released.
+    pub const fn is_just_released(&self, button: Button) -> bool {
+        let queried_bit = 1 << (button as u32);
+        (self.pressed_bits & queried_bit) == 0 && (self.last_pressed_bits & queried_bit) != 0
     }
 }
 
@@ -323,7 +333,6 @@ impl Gamepads {
                 connected: false,
                 pressed_bits: 0,
                 axes: [0.; 4],
-                #[cfg(target_family = "wasm")]
                 last_pressed_bits: 0,
                 #[cfg(not(target_family = "wasm"))]
                 just_pressed_bits: 0,

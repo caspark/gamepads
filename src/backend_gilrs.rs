@@ -30,6 +30,7 @@ impl crate::Gamepads {
 
     pub fn poll_gilrs(&mut self) {
         for gamepad in self.gamepads.iter_mut() {
+            gamepad.last_pressed_bits = gamepad.pressed_bits;
             gamepad.just_pressed_bits = 0;
         }
 
