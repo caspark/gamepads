@@ -33,6 +33,7 @@ winit = { git = "https://github.com/fornwall/winit", branch="axis-update-on-andr
 ], optional = true }
 jni = { version = "0", optional = true }
 ndk-context = { version = "0", optional = true }
+serde = { version = "1.0.213", features = ["derive"] }
 
 [target.'cfg(not(any(target_os = "android", target_family = "wasm")))'.dependencies]
 gilrs = "0.10"

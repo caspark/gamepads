@@ -138,6 +138,8 @@
 //! }
 //! ```
 
+use serde::{Deserialize, Serialize};
+
 #[cfg(all(target_os = "android", feature = "android-winit"))]
 mod backend_android_winit;
 #[cfg(not(any(target_family = "wasm", target_os = "android")))]
@@ -154,7 +156,7 @@ const MAX_GAMEPADS: usize = 8;
 ///
 /// A gamepad can be obtained using either [Gamepads::all()] to loop through all connected gamepads,
 /// or [Gamepads::get(gamepad_id)](Gamepads::get) to get it by an id.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[repr(C)]
 pub struct Gamepad {
     id: GamepadId,
@@ -277,7 +279,7 @@ impl Gamepad {
 /// Given a gamepad id, it's possible to get its gamepad state using [Gamepads::get(gamepad_id)](Gamepads::get).
 ///
 /// This is a small handle consisting of a single byte.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[repr(transparent)]
 pub struct GamepadId(u8);
 
